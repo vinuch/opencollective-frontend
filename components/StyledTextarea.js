@@ -9,6 +9,9 @@ import Container from './Container';
 import StyledTag from './StyledTag';
 
 const TextArea = styled.textarea`
+  font-family: 'inherit';
+  outline: none;
+
   /** Size */
   ${space}
   ${layout}
@@ -21,8 +24,6 @@ const TextArea = styled.textarea`
   /** Text */
   ${color}
   ${typography}
-
-  outline: none;
 
   ${props => {
     if (props.withOutline) {
@@ -37,6 +38,10 @@ const TextArea = styled.textarea`
               outline-offset: 0.25em;
             }
           `;
+    } else if (props.error) {
+      return css`
+        border-color: ${props.theme.colors.red[500]};
+      `;
     }
   }}
 
@@ -86,8 +91,8 @@ export default class StyledTextarea extends React.PureComponent {
     border: '1px solid',
     borderColor: 'black.300',
     borderRadius: '4px',
-    px: 3,
-    py: 2,
+    px: 12,
+    py: 12,
   };
 
   constructor(props) {
@@ -108,22 +113,29 @@ export default class StyledTextarea extends React.PureComponent {
     target.style.height = `${target.scrollHeight}px`;
   }
 
+  onChange = e => {
+    const { onChange, autoSize } = this.props;
+
+    if (onChange) {
+      onChange(e);
+    }
+
+    if (autoSize) {
+      this._adjustHeight(e.target);
+    }
+  };
+
   render() {
-    const { onChange, autoSize, showCount, resize, ...props } = this.props;
+    const { autoSize, showCount, resize, ...props } = this.props;
     const value = props.value || props.defaultValue || '';
 
     const textarea = (
       <TextArea
         ref={this.textareaRef}
         as="textarea"
-        onChange={e => {
-          onChange(e);
-          if (this.props.autoSize) {
-            this._adjustHeight(e.target);
-          }
-        }}
         resize={resize || (autoSize ? 'none' : 'vertical')}
         {...props}
+        onChange={this.onChange}
       />
     );
 

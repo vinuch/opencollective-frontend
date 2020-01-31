@@ -4,6 +4,9 @@ import { FormattedMessage } from 'react-intl';
 
 import Currency from './Currency';
 
+/** Default styles for the amount (not including currency) */
+export const DEFAULT_AMOUNT_STYLES = { letterSpacing: 0, fontWeight: 'bold', color: 'black.900' };
+
 /**
  * A practical component to format amounts and their intervals with proper
  * internationalization support.
@@ -75,6 +78,7 @@ FormattedMoneyAmount.defaultProps = {
   abbreviate: false,
   abbreviateInterval: false,
   precision: 0,
+  amountStyles: DEFAULT_AMOUNT_STYLES,
 };
 
 export default FormattedMoneyAmount;
