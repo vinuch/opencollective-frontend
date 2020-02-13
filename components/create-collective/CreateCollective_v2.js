@@ -1,21 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Page from '../Page';
-import ChooseCollectiveType from './sections/ChooseCollectiveType';
-import { Span, P, H1, H2, H3, H4, H5 } from '../Text';
-import Container from '../Container';
-import StyledButton from '../StyledButton';
-import Illustration from '../home/HomeIllustration';
+import CreateCollectiveHeader from './sections/CreateCollectiveHeader';
 import { addCreateCollectiveMutation } from '../../lib/graphql/mutations';
-import CreateCollectiveForm from '../CreateCollectiveForm';
-import CreateCollectiveCover from '../CreateCollectiveCover';
+import CreateCollectiveForm from './sections/CreateCollectiveForm';
+import CollectiveCategoryPicker from './sections/CollectiveCategoryPicker';
+import ConnectGithub from './sections/ConnectGithub';
 import ErrorPage from '../ErrorPage';
 import SignInOrJoinFree from '../SignInOrJoinFree';
 import { get } from 'lodash';
-import { Flex, Box } from '@rebass/grid';
-import styled, { css } from 'styled-components';
-import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
-import { Router, Link } from '../../server/pages';
+import { defineMessages, injectIntl } from 'react-intl';
+import { Router } from '../../server/pages';
 import { withUser } from '../UserProvider';
 import { getErrorFromGraphqlException } from '../../lib/utils';
 
@@ -30,7 +25,7 @@ class CreateCollective extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { collective: { type: 'COLLECTIVE' }, result: {} };
+    this.state = { collective: { type: 'COLLECTIVE' }, result: {}, category: null, subtitle: '' };
     this.createCollective = this.createCollective.bind(this);
     this.error = this.error.bind(this);
     this.resetError = this.resetError.bind(this);
@@ -55,19 +50,7 @@ class CreateCollective extends React.Component {
         apply: {
           title: this.props.intl.formatMessage(this.messages['collective.create.title']),
           description: this.props.intl.formatMessage(this.messages['collective.create.description']),
-          categories: [
-            'association',
-            'coop',
-            'lobby',
-            'meetup',
-            'movement',
-            'neighborhood',
-            'opensource',
-            'politicalparty',
-            'pta',
-            'studentclub',
-            'other',
-          ],
+          categories: ['community', 'climate', 'opensource'],
         },
       },
     };
@@ -81,6 +64,12 @@ class CreateCollective extends React.Component {
 
   resetError() {
     this.error();
+  }
+
+  handleChange(key, value) {
+    this.setState({
+      [key]: value,
+    });
   }
 
   async createCollective(CollectiveInputType) {
@@ -143,7 +132,7 @@ class CreateCollective extends React.Component {
           CollectiveSlug: collective.slug,
         });
       } else {
-        Router.pushRoute('editCollective', { slug: collective.slug, section: 'host' });
+        Router.pushRoute('collective', { slug: collective.slug });
       }
     } catch (err) {
       const errorMsg = getErrorFromGraphqlException(err).message;
@@ -153,38 +142,36 @@ class CreateCollective extends React.Component {
   }
 
   render() {
-    const { LoggedInUser, intl } = this.props;
+    const { LoggedInUser } = this.props;
+    const { category } = this.state;
 
     const canApply = get(this.host, 'settings.apply');
-    const title =
-      get(this.host, 'settings.apply.title') ||
-      intl.formatMessage(this.messages['host.apply.title'], {
-        hostname: this.host.name,
-      });
-    const description =
-      get(this.host, 'settings.apply.description') ||
-      intl.formatMessage(this.messages['collective.create.description'], {
-        hostname: this.host.name,
-      });
 
     if (!this.host) {
       return <ErrorPage loading />;
     }
 
-    if (!LoggedInUser) {
-      return (
-        <Page>
-          <Flex justifyContent="center" p={5}>
-            <SignInOrJoinFree />
-          </Flex>
-        </Page>
-      );
-    }
-
     return (
       <Page>
         <div className="CreateCollective">
-          <ChooseCollectiveType />
+          <CreateCollectiveHeader
+            subtitle={this.state.subtitle}
+            onChange={(key, value) => this.handleChange(key, value)}
+          />
+          {canApply && !LoggedInUser && <SignInOrJoinFree />}
+          {canApply && LoggedInUser && !category && (
+            <CollectiveCategoryPicker onChange={(key, value) => this.handleChange(key, value)} />
+          )}
+          {canApply && LoggedInUser && category && category !== 'opensource' && (
+            <CreateCollectiveForm
+              host={this.host}
+              subtitle={this.state.subtitle}
+              collective={this.state.collective}
+              onSubmit={this.createCollective}
+              onChange={this.resetError}
+            />
+          )}
+          {canApply && LoggedInUser && category === 'opensource' && <ConnectGithub />}
         </div>
       </Page>
     );

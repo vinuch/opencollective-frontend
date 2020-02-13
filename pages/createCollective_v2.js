@@ -1,11 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import CreateCollective from '../components/create-collective/CreateCollective_v2';
 import ErrorPage from '../components/ErrorPage';
-
 import { addCollectiveCoverData } from '../lib/graphql/queries';
-
 import { withUser } from '../components/UserProvider';
 
 class CreateCollectivePage extends React.Component {

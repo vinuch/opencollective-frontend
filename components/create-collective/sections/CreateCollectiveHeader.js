@@ -1,29 +1,47 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import themeGet from '@styled-system/theme-get';
 import { H1, Span } from '../../Text';
 import { Flex, Box } from '@rebass/grid';
-import styled from 'styled-components';
-import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 class CreateCollectiveHeader extends React.Component {
   static propTypes = {
-    subheader: PropTypes.string,
+    subtitle: PropTypes.string,
+    onChange: PropTypes.func.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = { subheader: this.props.subheader || null };
+  handleChange(fieldname, value) {
+    this.props.onChange(fieldname, value);
   }
 
   render() {
     return (
       <Fragment>
-        <Flex flexDirection="column" justifyContent="center" alignItems="center" p={4} mt={2}>
-          <H1 fontSize={['H3', null, 'H1']} lineHeight={['H3', null, 'H1']} fontWeight="bold" textAlign="center" mb={2}>
-            <FormattedMessage id="home.create" defaultMessage="Create a Collective" />
-          </H1>
-          {this.state.subheader && <Span>{this.state.subheader}</Span>}
+        <Flex flexDirection="column" p={4} mt={2}>
+          <Box textAlign="left">
+            <a
+              onClick={() => {
+                this.handleChange('category', null);
+                this.handleChange('subtitle', '');
+              }}
+            >
+              Back
+            </a>
+          </Box>
+          <Box>
+            <H1
+              fontSize={['H3', null, 'H1']}
+              lineHeight={['H3', null, 'H1']}
+              fontWeight="bold"
+              textAlign="center"
+              mb={3}
+            >
+              <FormattedMessage id="home.create" defaultMessage="Create a Collective" />
+            </H1>
+          </Box>
+          <Box textAlign="center">
+            <Span mb={2}>{this.props.subtitle}</Span>
+          </Box>
         </Flex>
       </Fragment>
     );
