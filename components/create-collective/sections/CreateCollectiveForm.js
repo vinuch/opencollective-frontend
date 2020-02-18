@@ -42,8 +42,15 @@ class CreateCollectiveForm extends React.Component {
 
     this.messages = defineMessages({
       'tos.label': {
-        id: 'collective.tos.label',
-        defaultMessage: 'Terms of Service',
+        id: 'createcollective.tos.label',
+        defaultMessage: `I agree with the toslink`,
+        // values: {
+        //   toslink: (
+        //     <a href="/tos" target="_blank" rel="noopener noreferrer">
+        //       terms of service of Open Collective
+        //     </a>
+        //   ),
+        // },
       },
     });
   }
@@ -169,24 +176,27 @@ class CreateCollectiveForm extends React.Component {
                     </StyledInputField>
 
                     <Box className="tos" m={4} p={2}>
-                      <label>{intl.formatMessage(this.messages['tos.label'])}</label>
-                      <div>
-                        <input
-                          type="checkbox"
-                          name="tos"
-                          required
-                          onChange={({ target }) => this.handleChange('tos', target.checked)}
-                        />
-                        <span>
-                          I agree with the{' '}
-                          <a href="/tos" target="_blank" rel="noopener noreferrer">
-                            terms of service of Open Collective
-                          </a>
-                        </span>
-                      </div>
+                      <StyledCheckbox
+                        name="tos"
+                        label={intl.formatMessage(this.messages['tos.label'])}
+                        required
+                        checked={this.state.checked}
+                        onChange={({ checked }) => {
+                          this.handleChange('tos', checked);
+                          this.setState({ checked });
+                        }}
+                      />
                       {get(host, 'settings.tos') && (
                         <div>
-                          <StyledCheckbox required onChange={({ checked }) => this.setState({ checked })} />
+                          <StyledCheckbox
+                            name="tos"
+                            required
+                            checked={this.state.checked}
+                            onChange={({ checked }) => {
+                              this.handleChange('tos', checked);
+                              this.setState({ checked });
+                            }}
+                          />
                           <span>
                             I agree with the{' '}
                             <a href={get(host, 'settings.tos')} target="_blank" rel="noopener noreferrer">

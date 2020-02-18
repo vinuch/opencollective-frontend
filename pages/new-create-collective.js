@@ -6,12 +6,15 @@ import { addCollectiveCoverData } from '../lib/graphql/queries';
 import { withUser } from '../components/UserProvider';
 
 class CreateCollectivePage extends React.Component {
-  static getInitialProps({ query: { hostCollectiveSlug } }) {
-    const scripts = { googleMaps: true }; // Used in <InputTypeLocation>
-    return { slug: hostCollectiveSlug, scripts };
+  static async getInitialProps({ query }) {
+    return {
+      token: query && query.token,
+      slug: query && query.hostCollectiveSlug,
+    };
   }
 
   static propTypes = {
+    token: PropTypes.string,
     slug: PropTypes.string, // for addCollectiveCoverData
     data: PropTypes.object, // from withData
     loadingLoggedInUser: PropTypes.bool,
@@ -22,13 +25,13 @@ class CreateCollectivePage extends React.Component {
   }
 
   render() {
-    const { data = {}, loadingLoggedInUser } = this.props;
+    const { data = {}, loadingLoggedInUser, token } = this.props;
 
     if (loadingLoggedInUser || data.error) {
       return <ErrorPage loading={loadingLoggedInUser} data={data} />;
     }
 
-    return <CreateCollective host={data.Collective} />;
+    return <CreateCollective host={data.Collective} token={token} />;
   }
 }
 

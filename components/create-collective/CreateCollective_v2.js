@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Page from '../Page';
 import CreateCollectiveHeader from './sections/CreateCollectiveHeader';
@@ -14,9 +14,11 @@ import { Router } from '../../server/pages';
 import { withUser } from '../UserProvider';
 import { getErrorFromGraphqlException } from '../../lib/utils';
 
-class CreateCollective extends React.Component {
+class CreateCollective extends Component {
   static propTypes = {
+    token: PropTypes.string,
     host: PropTypes.object,
+    query: PropTypes.object,
     LoggedInUser: PropTypes.object, // from withUser
     refetchLoggedInUser: PropTypes.func.isRequired, // from withUser
     intl: PropTypes.object.isRequired,
@@ -50,12 +52,19 @@ class CreateCollective extends React.Component {
         apply: {
           title: this.props.intl.formatMessage(this.messages['collective.create.title']),
           description: this.props.intl.formatMessage(this.messages['collective.create.description']),
-          categories: ['community', 'climate', 'opensource'],
         },
       },
     };
 
     this.next = props.host ? `/${props.host.slug}/apply` : '/create';
+  }
+
+  async componentDidMount() {
+    const { token } = this.props;
+    if (token) {
+      this.setState({ category: 'opensource' });
+    }
+    return;
   }
 
   error(msg) {
@@ -142,7 +151,7 @@ class CreateCollective extends React.Component {
   }
 
   render() {
-    const { LoggedInUser } = this.props;
+    const { LoggedInUser, token } = this.props;
     const { category } = this.state;
 
     const canApply = get(this.host, 'settings.apply');
@@ -171,7 +180,13 @@ class CreateCollective extends React.Component {
               onChange={this.resetError}
             />
           )}
-          {canApply && LoggedInUser && category === 'opensource' && <ConnectGithub />}
+          {canApply && LoggedInUser && category === 'opensource' && (
+            <ConnectGithub
+              token={token}
+              subtitle={this.state.subtitle}
+              onChange={(key, value) => this.handleChange(key, value)}
+            />
+          )}
         </div>
       </Page>
     );
