@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CreateCollective from '../components/create-collective/CreateCollective_v2';
+import NewCreateCollective from '../components/create-collective/NewCreateCollective';
 import ErrorPage from '../components/ErrorPage';
 import { addCollectiveCoverData } from '../lib/graphql/queries';
 import { withUser } from '../components/UserProvider';
@@ -31,7 +31,7 @@ class CreateCollectivePage extends React.Component {
       return <ErrorPage loading={loadingLoggedInUser} data={data} />;
     }
 
-    return <CreateCollective host={data.Collective} token={token} />;
+    return <NewCreateCollective host={data.Collective} token={token} />;
   }
 }
 

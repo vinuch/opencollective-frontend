@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Flex, Box } from '@rebass/grid';
+import { H1 } from '../../Text';
 import themeGet from '@styled-system/theme-get';
 import StyledButton from '../../StyledButton';
 import Illustration from '../../home/HomeIllustration';
@@ -30,14 +31,6 @@ class CollectiveCategoryPicker extends React.Component {
         defaultMessage: 'For open source projects',
       },
       climate: { id: 'collective.category.climate', defaultMessage: 'For climate initiatives' },
-      introduceSubtitle: {
-        id: 'collective.subtitle.introduce',
-        defaultMessage: 'Introduce your Collective to the community.',
-      },
-      openSourceSubtitle: {
-        id: 'collective.subtitle.opensource',
-        defaultMessage: 'Open source projects are invited to join the Open Source Collective fiscal host.',
-      },
     });
   }
 
@@ -62,6 +55,13 @@ class CollectiveCategoryPicker extends React.Component {
 
     return (
       <div className="CollectiveCategoryPicker">
+        <Flex flexDirection="column" p={4} mt={2}>
+          <Box mt={4} mb={3}>
+            <H1 fontSize={['H3', null, 'H1']} lineHeight={['H3', null, 'H1']} fontWeight="bold" textAlign="center">
+              <FormattedMessage id="home.create" defaultMessage="Create a Collective" />
+            </H1>
+          </Box>
+        </Flex>
         <Flex flexDirection="column" justifyContent="center" alignItems="center" p={2}>
           <Box alignItems="center" p={3}>
             <Flex justifyContent="center" alignItems="center" p={4}>
@@ -78,10 +78,7 @@ class CollectiveCategoryPicker extends React.Component {
                       buttonStyle="primary"
                       mb={4}
                       px={4}
-                      onClick={() => {
-                        this.handleChange('category', 'opensource');
-                        this.handleChange('subtitle', intl.formatMessage(this.messages.openSourceSubtitle));
-                      }}
+                      onClick={() => this.handleChange('category', 'opensource')}
                     >
                       {intl.formatMessage(this.messages.opensource)}
                     </StyledButton>
@@ -102,12 +99,9 @@ class CollectiveCategoryPicker extends React.Component {
                       buttonStyle="primary"
                       mb={4}
                       px={4}
-                      onClick={() => {
-                        this.handleChange('category', 'community');
-                        this.handleChange('subtitle', intl.formatMessage(this.messages.introduceSubtitle));
-                      }}
+                      onClick={() => this.handleChange('category', 'community')}
                     >
-                      {intl.formatMessage(this.messages.community)}{' '}
+                      {intl.formatMessage(this.messages.community)}
                     </StyledButton>
                     <ExamplesLink href="#">
                       <FormattedMessage id="createCollective.examples" defaultMessage="See examples" />
@@ -126,12 +120,9 @@ class CollectiveCategoryPicker extends React.Component {
                       buttonStyle="primary"
                       mb={4}
                       px={4}
-                      onClick={() => {
-                        this.handleChange('category', 'climate');
-                        this.handleChange('subtitle', intl.formatMessage(this.messages.introduceSubtitle));
-                      }}
+                      onClick={() => this.handleChange('category', 'climate')}
                     >
-                      {intl.formatMessage(this.messages.climate)}{' '}
+                      {intl.formatMessage(this.messages.climate)}
                     </StyledButton>
                     <ExamplesLink href="#">
                       <FormattedMessage id="createCollective.examples" defaultMessage="See examples" />

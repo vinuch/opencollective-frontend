@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik, Field, Form } from 'formik';
 import { Flex, Box } from '@rebass/grid';
+import { H1, Span } from '../../Text';
 import { assign, get } from 'lodash';
 import StyledCheckbox from '../../StyledCheckbox';
 import StyledInput from '../../StyledInput';
@@ -41,6 +42,10 @@ class CreateCollectiveForm extends React.Component {
     }
 
     this.messages = defineMessages({
+      introduceSubtitle: {
+        id: 'collective.subtitle.introduce',
+        defaultMessage: 'Introduce your Collective to the community.',
+      },
       'tos.label': {
         id: 'createcollective.tos.label',
         defaultMessage: `I agree with the toslink`,
@@ -105,6 +110,19 @@ class CreateCollectiveForm extends React.Component {
 
     return (
       <div className="CreateCollectiveForm">
+        <Flex flexDirection="column" p={4} mt={2}>
+          <Box textAlign="left" minHeight={['32px']}>
+            <a>Back</a>
+          </Box>
+          <Box mb={3}>
+            <H1 fontSize={['H3', null, 'H1']} lineHeight={['H3', null, 'H1']} fontWeight="bold" textAlign="center">
+              <FormattedMessage id="home.create" defaultMessage="Create a Collective" />
+            </H1>
+          </Box>
+          <Box textAlign="center" minHeight={['24px']}>
+            <Span mb={2}>{intl.formatMessage(this.messages.introduceSubtitle)}</Span>
+          </Box>
+        </Flex>
         <Flex alignItems="center" justifyContent="center">
           <Box
             p={4}

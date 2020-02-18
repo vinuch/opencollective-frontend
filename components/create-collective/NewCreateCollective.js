@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Page from '../Page';
-import CreateCollectiveHeader from './sections/CreateCollectiveHeader';
 import { addCreateCollectiveMutation } from '../../lib/graphql/mutations';
 import CreateCollectiveForm from './sections/CreateCollectiveForm';
 import CollectiveCategoryPicker from './sections/CollectiveCategoryPicker';
@@ -14,7 +13,7 @@ import { Router } from '../../server/pages';
 import { withUser } from '../UserProvider';
 import { getErrorFromGraphqlException } from '../../lib/utils';
 
-class CreateCollective extends Component {
+class NewCreateCollective extends Component {
   static propTypes = {
     token: PropTypes.string,
     host: PropTypes.object,
@@ -27,7 +26,7 @@ class CreateCollective extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { collective: { type: 'COLLECTIVE' }, result: {}, category: null, subtitle: '' };
+    this.state = { collective: { type: 'COLLECTIVE' }, result: {}, category: null };
     this.createCollective = this.createCollective.bind(this);
     this.error = this.error.bind(this);
     this.resetError = this.resetError.bind(this);
@@ -163,10 +162,6 @@ class CreateCollective extends Component {
     return (
       <Page>
         <div className="CreateCollective">
-          <CreateCollectiveHeader
-            subtitle={this.state.subtitle}
-            onChange={(key, value) => this.handleChange(key, value)}
-          />
           {canApply && !LoggedInUser && <SignInOrJoinFree />}
           {canApply && LoggedInUser && !category && (
             <CollectiveCategoryPicker onChange={(key, value) => this.handleChange(key, value)} />
@@ -174,18 +169,13 @@ class CreateCollective extends Component {
           {canApply && LoggedInUser && category && category !== 'opensource' && (
             <CreateCollectiveForm
               host={this.host}
-              subtitle={this.state.subtitle}
               collective={this.state.collective}
               onSubmit={this.createCollective}
               onChange={this.resetError}
             />
           )}
           {canApply && LoggedInUser && category === 'opensource' && (
-            <ConnectGithub
-              token={token}
-              subtitle={this.state.subtitle}
-              onChange={(key, value) => this.handleChange(key, value)}
-            />
+            <ConnectGithub token={token} onChange={(key, value) => this.handleChange(key, value)} />
           )}
         </div>
       </Page>
@@ -193,4 +183,4 @@ class CreateCollective extends Component {
   }
 }
 
-export default injectIntl(withUser(addCreateCollectiveMutation(CreateCollective)));
+export default injectIntl(withUser(addCreateCollectiveMutation(NewCreateCollective)));
