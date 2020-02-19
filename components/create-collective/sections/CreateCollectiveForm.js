@@ -9,8 +9,9 @@ import StyledInput from '../../StyledInput';
 import StyledInputField from '../../StyledInputField';
 import StyledInputGroup from '../../StyledInputGroup';
 import StyledButton from '../../StyledButton';
-import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, injectIntl } from 'react-intl';
 import { defaultBackgroundImage } from '../../../lib/constants/collectives';
+import { Router } from '../../../server/pages';
 
 class CreateCollectiveForm extends React.Component {
   static propTypes = {
@@ -19,6 +20,7 @@ class CreateCollectiveForm extends React.Component {
     loading: PropTypes.bool,
     onSubmit: PropTypes.func,
     intl: PropTypes.object.isRequired,
+    onChange: PropTypes.func,
   };
 
   constructor(props) {
@@ -67,6 +69,11 @@ class CreateCollectiveForm extends React.Component {
   }
 
   handleChange(fieldname, value) {
+    if (value === null) {
+      this.props.onChange(fieldname, value);
+      return;
+    }
+
     const collective = {};
 
     collective[fieldname] = value;
@@ -75,6 +82,11 @@ class CreateCollectiveForm extends React.Component {
       collective: assign(this.state.collective, collective),
     });
   }
+
+  changeRoute = async params => {
+    await Router.pushRoute('new-create-collective', params);
+    window.scrollTo(0, 0);
+  };
 
   render() {
     const { host, intl } = this.props;
@@ -118,7 +130,16 @@ class CreateCollectiveForm extends React.Component {
       <div className="CreateCollectiveForm">
         <Flex flexDirection="column" p={4} mt={2}>
           <Box textAlign="left" minHeight={['32px']}>
-            <a>{intl.formatMessage(this.messages.back)}</a>
+            <StyledButton
+              asLink
+              fontSize="Paragraph"
+              onClick={() => {
+                this.changeRoute({ verb: 'create', category: undefined });
+                this.handleChange('category', null);
+              }}
+            >
+              ←&nbsp;{intl.formatMessage(this.messages.back)}
+            </StyledButton>
           </Box>
           <Box mb={3}>
             <H1 fontSize={['H3', null, 'H1']} lineHeight={['H3', null, 'H1']} fontWeight="bold" textAlign="center">

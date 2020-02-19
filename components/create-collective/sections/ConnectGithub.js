@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Flex, Box } from '@rebass/grid';
 import StyledButton from '../../StyledButton';
 import StyledCheckbox from '../../StyledCheckbox';
-import Container from '../../Container';
 import { P, H1, Span } from '../../Text';
 import GithubRepositories from '../../GithubRepositories';
 import StyledInputField from '../../StyledInputField';
@@ -51,6 +50,10 @@ class ConnectGithub extends React.Component {
         id: 'collective.header.pickarepo',
         defaultMessage: 'Pick a repo',
       },
+      back: {
+        id: 'createCollective.link.back',
+        defaultMessage: 'Back',
+      },
     });
     this.state = {
       result: {},
@@ -93,6 +96,11 @@ class ConnectGithub extends React.Component {
     this.props.onChange(fieldname, value);
   }
 
+  changeRoute = async params => {
+    await Router.pushRoute('new-create-collective', params);
+    window.scrollTo(0, 0);
+  };
+
   async createCollectives(collectiveInputType) {
     collectiveInputType.type = 'COLLECTIVE';
     try {
@@ -105,7 +113,6 @@ class ConnectGithub extends React.Component {
       });
     } catch (err) {
       const errorMsg = getErrorFromGraphqlException(err).message;
-      console.log(errorMsg);
       this.setState({
         creatingCollective: false,
         result: { type: 'error', mesg: errorMsg },
@@ -114,7 +121,7 @@ class ConnectGithub extends React.Component {
   }
 
   getGithubConnectUrl() {
-    const urlParams = new URLSearchParams({ redirect: `${getWebsiteUrl()}/create/v2` });
+    const urlParams = new URLSearchParams({ redirect: `${getWebsiteUrl()}/create/v2/openSource` });
     const accessToken = getFromLocalStorage(LOCAL_STORAGE_KEYS.ACCESS_TOKEN);
 
     if (accessToken) {
@@ -134,7 +141,16 @@ class ConnectGithub extends React.Component {
           <Fragment>
             <Flex flexDirection="column" p={4} mt={2}>
               <Box textAlign="left" minHeight={['32px']}>
-                <a>Back</a>
+                <StyledButton
+                  asLink
+                  fontSize="Paragraph"
+                  onClick={() => {
+                    this.changeRoute({ verb: 'create', category: undefined });
+                    this.handleChange('category', null);
+                  }}
+                >
+                  ←&nbsp;{intl.formatMessage(this.messages.back)}
+                </StyledButton>
               </Box>
               <Box mb={3}>
                 <H1 fontSize={['H3', null, 'H1']} lineHeight={['H3', null, 'H1']} fontWeight="bold" textAlign="center">
@@ -153,7 +169,16 @@ class ConnectGithub extends React.Component {
           <Fragment>
             <Flex flexDirection="column" p={4} mt={2}>
               <Box textAlign="left" minHeight={['32px']}>
-                <a>Back</a>
+                <StyledButton
+                  asLink
+                  fontSize="Paragraph"
+                  onClick={() => {
+                    this.changeRoute({ verb: 'create', category: undefined });
+                    this.handleChange('category', null);
+                  }}
+                >
+                  ←&nbsp;{intl.formatMessage(this.messages.back)}
+                </StyledButton>
               </Box>
               <Box mb={3}>
                 <H1 fontSize={['H3', null, 'H1']} lineHeight={['H3', null, 'H1']} fontWeight="bold" textAlign="center">
@@ -190,7 +215,16 @@ class ConnectGithub extends React.Component {
           <Fragment>
             <Flex flexDirection="column" p={4} mt={2}>
               <Box textAlign="left" minHeight={['32px']}>
-                <a>Back</a>
+                <StyledButton
+                  asLink
+                  fontSize="Paragraph"
+                  onClick={() => {
+                    this.changeRoute({ verb: 'create', category: undefined });
+                    this.handleChange('category', null);
+                  }}
+                >
+                  ←&nbsp;{intl.formatMessage(this.messages.back)}
+                </StyledButton>
               </Box>
               <Box mb={3}>
                 <H1 fontSize={['H3', null, 'H1']} lineHeight={['H3', null, 'H1']} fontWeight="bold" textAlign="center">

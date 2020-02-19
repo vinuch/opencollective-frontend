@@ -9,7 +9,6 @@ import ErrorPage from '../ErrorPage';
 import SignInOrJoinFree from '../SignInOrJoinFree';
 import { get } from 'lodash';
 import { defineMessages, injectIntl } from 'react-intl';
-import { Router } from '../../server/pages';
 import { withUser } from '../UserProvider';
 import { getErrorFromGraphqlException } from '../../lib/utils';
 
@@ -171,6 +170,7 @@ class NewCreateCollective extends Component {
               host={this.host}
               collective={this.state.collective}
               onSubmit={this.createCollective}
+              onChange={(key, value) => this.handleChange(key, value)}
               //onChange={this.resetError}
             />
           )}

@@ -64,7 +64,10 @@ const pages = routes()
   .add('member-invitations', '/member-invitations');
 
 // New Create Collective Flow
-pages.add('new-create-collective', '/:hostCollectiveSlug?/(apply|create)/v2');
+pages.add(
+  'new-create-collective',
+  '/:hostCollectiveSlug?/:verb(apply|create)/v2/:category(openSource|community|climate)?',
+);
 
 // Events using new collective page
 pages.add('event', '/:parentCollectiveSlug/events/:eventSlug', 'new-collective-page');

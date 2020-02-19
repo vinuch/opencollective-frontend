@@ -7,6 +7,7 @@ import StyledButton from '../../StyledButton';
 import Illustration from '../../home/HomeIllustration';
 import styled from 'styled-components';
 import { defineMessages, injectIntl } from 'react-intl';
+import { Router } from '../../../server/pages';
 
 class CollectiveCategoryPicker extends React.Component {
   static propTypes = {
@@ -39,6 +40,11 @@ class CollectiveCategoryPicker extends React.Component {
   handleChange(fieldname, value) {
     this.props.onChange(fieldname, value);
   }
+
+  changeRoute = async params => {
+    await Router.pushRoute('new-create-collective', params);
+    window.scrollTo(0, 0);
+  };
 
   render() {
     const { intl } = this.props;
@@ -80,7 +86,10 @@ class CollectiveCategoryPicker extends React.Component {
                       buttonStyle="primary"
                       mb={4}
                       px={4}
-                      onClick={() => this.handleChange('category', 'opensource')}
+                      onClick={() => {
+                        this.handleChange('category', 'opensource');
+                        this.changeRoute({ verb: 'create', category: 'openSource' });
+                      }}
                     >
                       {intl.formatMessage(this.messages.opensource)}
                     </StyledButton>
@@ -99,7 +108,10 @@ class CollectiveCategoryPicker extends React.Component {
                       buttonStyle="primary"
                       mb={4}
                       px={4}
-                      onClick={() => this.handleChange('category', 'community')}
+                      onClick={() => {
+                        this.handleChange('category', 'community');
+                        this.changeRoute({ verb: 'create', category: 'community' });
+                      }}
                     >
                       {intl.formatMessage(this.messages.community)}
                     </StyledButton>
@@ -118,7 +130,10 @@ class CollectiveCategoryPicker extends React.Component {
                       buttonStyle="primary"
                       mb={4}
                       px={4}
-                      onClick={() => this.handleChange('category', 'climate')}
+                      onClick={() => {
+                        this.handleChange('category', 'climate');
+                        this.changeRoute({ verb: 'create', category: 'climate' });
+                      }}
                     >
                       {intl.formatMessage(this.messages.climate)}
                     </StyledButton>
