@@ -171,7 +171,7 @@ class NewCreateCollective extends Component {
               host={this.host}
               collective={this.state.collective}
               onSubmit={this.createCollective}
-              onChange={this.resetError}
+              //onChange={this.resetError}
             />
           )}
           {canApply && LoggedInUser && category === 'opensource' && (

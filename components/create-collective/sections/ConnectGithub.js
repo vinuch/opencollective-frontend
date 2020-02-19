@@ -3,15 +3,17 @@ import PropTypes from 'prop-types';
 import { Flex, Box } from '@rebass/grid';
 import StyledButton from '../../StyledButton';
 import StyledCheckbox from '../../StyledCheckbox';
-import { P, H1, Span } from '../../Text';
 import Container from '../../Container';
+import { P, H1, Span } from '../../Text';
 import GithubRepositories from '../../GithubRepositories';
 import StyledInputField from '../../StyledInputField';
 import Loading from '../../Loading';
 import GithubRepositoriesFAQ from '../../faqs/GithubRepositoriesFAQ';
+import { withUser } from '../../UserProvider';
 import { URLSearchParams } from 'universal-url';
 import { Router } from '../../../server/pages';
 import { getGithubRepos } from '../../../lib/api';
+import { addCreateCollectiveFromGithubMutation } from '../../../lib/graphql/mutations';
 import { getWebsiteUrl, getErrorFromGraphqlException } from '../../../lib/utils';
 import { LOCAL_STORAGE_KEYS, getFromLocalStorage } from '../../../lib/local-storage';
 import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
@@ -103,6 +105,7 @@ class ConnectGithub extends React.Component {
       });
     } catch (err) {
       const errorMsg = getErrorFromGraphqlException(err).message;
+      console.log(errorMsg);
       this.setState({
         creatingCollective: false,
         result: { type: 'error', mesg: errorMsg },
@@ -162,8 +165,9 @@ class ConnectGithub extends React.Component {
                 <P mb={2}>{intl.formatMessage(this.messages.repoSubtitleP2)}</P>
               </Box>
             </Flex>
-            <Flex justifyContent="center" alignItems="center" mb={4} p={4}>
-              <Box maxWidth={500}>
+            <Flex justifyContent="center" width={1} mb={4}>
+              <Box width={[0, null, null, '24em']} />
+              <Box maxWidth={500} minWidth={400}>
                 <StyledInputField htmlFor="collective">
                   {fieldProps => (
                     <GithubRepositories
@@ -178,9 +182,7 @@ class ConnectGithub extends React.Component {
                   )}
                 </StyledInputField>
               </Box>
-              <Box ml={4}>
-                <GithubRepositoriesFAQ mt={4} display={['none', null, 'block']} width={1 / 5} minWidth="335px" />
-              </Box>
+              <GithubRepositoriesFAQ mt={4} ml={4} display={['none', null, 'block']} width={1 / 5} minWidth="335px" />
             </Flex>
           </Fragment>
         )}
@@ -269,4 +271,4 @@ class ConnectGithub extends React.Component {
   }
 }
 
-export default injectIntl(ConnectGithub);
+export default injectIntl(withUser(addCreateCollectiveFromGithubMutation(ConnectGithub)));

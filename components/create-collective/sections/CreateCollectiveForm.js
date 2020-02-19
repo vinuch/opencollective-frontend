@@ -41,7 +41,7 @@ class CreateCollectiveForm extends React.Component {
         defaultMessage: 'Introduce your Collective to the community.',
       },
       back: {
-        id: 'createCollective.subtitle.introduce',
+        id: 'createCollective.link.back',
         defaultMessage: 'Back',
       },
       header: { id: 'createCollective.header.create', defaultMessage: 'Create a Collective' },

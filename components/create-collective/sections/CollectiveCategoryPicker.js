@@ -6,7 +6,7 @@ import themeGet from '@styled-system/theme-get';
 import StyledButton from '../../StyledButton';
 import Illustration from '../../home/HomeIllustration';
 import styled from 'styled-components';
-import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, injectIntl } from 'react-intl';
 
 class CollectiveCategoryPicker extends React.Component {
   static propTypes = {
