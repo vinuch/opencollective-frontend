@@ -23,14 +23,16 @@ class CollectiveCategoryPicker extends React.Component {
 
     this.messages = defineMessages({
       community: {
-        id: 'collective.category.community',
+        id: 'createCollective.category.community',
         defaultMessage: 'For any community',
       },
       opensource: {
-        id: 'collective.category.newopensource',
+        id: 'createCollective.category.newOpenSource',
         defaultMessage: 'For open source projects',
       },
-      climate: { id: 'collective.category.climate', defaultMessage: 'For climate initiatives' },
+      climate: { id: 'createCollective.category.climate', defaultMessage: 'For climate initiatives' },
+      header: { id: 'createCollective.header.create', defaultMessage: 'Create a Collective' },
+      examples: { id: 'createCollective.examples', defaultMessage: 'See examples' },
     });
   }
 
@@ -58,7 +60,7 @@ class CollectiveCategoryPicker extends React.Component {
         <Flex flexDirection="column" p={4} mt={2}>
           <Box mt={4} mb={3}>
             <H1 fontSize={['H3', null, 'H1']} lineHeight={['H3', null, 'H1']} fontWeight="bold" textAlign="center">
-              <FormattedMessage id="home.create" defaultMessage="Create a Collective" />
+              {intl.formatMessage(this.messages.header)}{' '}
             </H1>
           </Box>
         </Flex>
@@ -71,7 +73,7 @@ class CollectiveCategoryPicker extends React.Component {
                     <Illustration
                       src="/static/images/createcollective-opensource.png"
                       display={['none', null, null, 'block']}
-                      alt="For open source projects"
+                      alt={intl.formatMessage(this.messages.opensource)}
                     />
                     <StyledButton
                       buttonSize="large"
@@ -82,9 +84,7 @@ class CollectiveCategoryPicker extends React.Component {
                     >
                       {intl.formatMessage(this.messages.opensource)}
                     </StyledButton>
-                    <ExamplesLink href="#">
-                      <FormattedMessage id="createCollective.examples" defaultMessage="See examples" />
-                    </ExamplesLink>
+                    <ExamplesLink href="#">{intl.formatMessage(this.messages.examples)}</ExamplesLink>
                   </Flex>
                 </Box>
                 <Box alignItems="center" width={['400px']} p={3} style={boxStyle}>
@@ -92,7 +92,7 @@ class CollectiveCategoryPicker extends React.Component {
                     <Illustration
                       src="/static/images/createcollective-anycommunity.png"
                       display={['none', null, null, 'block']}
-                      alt="For any community"
+                      alt={intl.formatMessage(this.messages.community)}
                     />
                     <StyledButton
                       buttonSize="large"
@@ -103,9 +103,7 @@ class CollectiveCategoryPicker extends React.Component {
                     >
                       {intl.formatMessage(this.messages.community)}
                     </StyledButton>
-                    <ExamplesLink href="#">
-                      <FormattedMessage id="createCollective.examples" defaultMessage="See examples" />
-                    </ExamplesLink>
+                    <ExamplesLink href="#">{intl.formatMessage(this.messages.examples)}</ExamplesLink>
                   </Flex>
                 </Box>
                 <Box alignItems="center" width={['400px']} p={3} style={boxStyle}>
@@ -113,7 +111,7 @@ class CollectiveCategoryPicker extends React.Component {
                     <Illustration
                       src="/static/images/createcollective-climateinitiative.png"
                       display={['none', null, null, 'block']}
-                      alt="For climate initiatives"
+                      alt={intl.formatMessage(this.messages.climate)}
                     />
                     <StyledButton
                       buttonSize="large"
@@ -124,9 +122,7 @@ class CollectiveCategoryPicker extends React.Component {
                     >
                       {intl.formatMessage(this.messages.climate)}
                     </StyledButton>
-                    <ExamplesLink href="#">
-                      <FormattedMessage id="createCollective.examples" defaultMessage="See examples" />
-                    </ExamplesLink>
+                    <ExamplesLink href="#">{intl.formatMessage(this.messages.examples)}</ExamplesLink>
                   </Flex>
                 </Box>
               </Fragment>
