@@ -35,16 +35,22 @@ class CreateCollectiveForm extends React.Component {
       checked: false,
     };
 
-    this.categories = get(props.host, 'settings.apply.categories') || [];
-
-    if (this.categories.length === 1) {
-      this.state.collective.category = this.categories[0];
-    }
-
     this.messages = defineMessages({
       introduceSubtitle: {
-        id: 'collective.subtitle.introduce',
+        id: 'createCollective.subtitle.introduce',
         defaultMessage: 'Introduce your Collective to the community.',
+      },
+      back: {
+        id: 'createCollective.subtitle.introduce',
+        defaultMessage: 'Back',
+      },
+      header: { id: 'createCollective.header.create', defaultMessage: 'Create a Collective' },
+      nameLabel: { id: 'createCollective.form.nameLabel', defaultMessage: "What's the name of your collective?" },
+      urlLabel: { id: 'createCollective.form.urlLabel', defaultMessage: 'What URL would you like?' },
+      descLabel: { id: 'createCollective.form.descLabel', defaultMessage: 'What does your collective do?' },
+      createButton: {
+        id: 'createCollective.button.create',
+        defaultMessage: 'Create Collective',
       },
       'tos.label': {
         id: 'createcollective.tos.label',
@@ -112,11 +118,11 @@ class CreateCollectiveForm extends React.Component {
       <div className="CreateCollectiveForm">
         <Flex flexDirection="column" p={4} mt={2}>
           <Box textAlign="left" minHeight={['32px']}>
-            <a>Back</a>
+            <a>{intl.formatMessage(this.messages.back)}</a>
           </Box>
           <Box mb={3}>
             <H1 fontSize={['H3', null, 'H1']} lineHeight={['H3', null, 'H1']} fontWeight="bold" textAlign="center">
-              <FormattedMessage id="home.create" defaultMessage="Create a Collective" />
+              {intl.formatMessage(this.messages.header)}
             </H1>
           </Box>
           <Box textAlign="center" minHeight={['24px']}>
@@ -147,7 +153,7 @@ class CreateCollectiveForm extends React.Component {
                       name="name"
                       htmlFor="name"
                       error={errors.name}
-                      label="What's the name of your collective?"
+                      label={intl.formatMessage(this.messages.nameLabel)}
                       value={values.name}
                       required
                       m={4}
@@ -159,7 +165,7 @@ class CreateCollectiveForm extends React.Component {
                       name="url"
                       htmlFor="url"
                       error={errors.url}
-                      label="What URL would you like?"
+                      label={intl.formatMessage(this.messages.urlLabel)}
                       value={values.url}
                       required
                       m={4}
@@ -178,7 +184,7 @@ class CreateCollectiveForm extends React.Component {
                       name="desc"
                       htmlFor="desc"
                       error={errors.desc}
-                      label="What does your collective do?"
+                      label={intl.formatMessage(this.messages.descLabel)}
                       value={values.desc}
                       required
                       m={4}
@@ -238,7 +244,7 @@ class CreateCollectiveForm extends React.Component {
                         onSubmit={handleSubmit}
                         mb={4}
                       >
-                        <FormattedMessage id="collective.create.button" defaultMessage="Create Collective" />
+                        {intl.formatMessage(this.messages.createButton)}
                       </StyledButton>
                     </Box>
                   </Form>
