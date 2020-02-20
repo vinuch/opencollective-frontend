@@ -4,6 +4,7 @@ import { Flex, Box } from '@rebass/grid';
 import { H1 } from '../../Text';
 import themeGet from '@styled-system/theme-get';
 import StyledButton from '../../StyledButton';
+import Container from '../../Container';
 import styled from 'styled-components';
 import { defineMessages, injectIntl } from 'react-intl';
 import { Router } from '../../../server/pages';
@@ -82,7 +83,7 @@ class CollectiveCategoryPicker extends React.Component {
           <Box alignItems="center">
             <Flex justifyContent="center" alignItems="center" flexDirection={['column', 'row']}>
               <Fragment>
-                <Box alignItems="center" width={['312px']}>
+                <Container alignItems="center" width={['312px']} mb={[4, null, null, 0]}>
                   <Flex flexDirection="column" justifyContent="center" alignItems="center">
                     <img
                       className="categoryImage"
@@ -105,8 +106,14 @@ class CollectiveCategoryPicker extends React.Component {
                     </StyledButton>
                     <ExamplesLink href="#">{intl.formatMessage(this.messages.examples)}</ExamplesLink>
                   </Flex>
-                </Box>
-                <Box alignItems="center" width={['312px']}>
+                </Container>
+                <Container
+                  borderLeft={['none', null, null, `1px solid #E6E8EB`]}
+                  borderTop={['1px solid #E6E8EB', null, null, 'none']}
+                  alignItems="center"
+                  width={['312px']}
+                  mb={[4, null, null, 0]}
+                >
                   <Flex flexDirection="column" justifyContent="center" alignItems="center">
                     <img
                       className="categoryImage"
@@ -129,16 +136,12 @@ class CollectiveCategoryPicker extends React.Component {
                     </StyledButton>
                     <ExamplesLink href="#">{intl.formatMessage(this.messages.examples)}</ExamplesLink>
                   </Flex>
-                </Box>
-                <Box
+                </Container>
+                <Container
+                  borderLeft={['none', null, null, '1px solid #E6E8EB']}
+                  borderTop={['1px solid #E6E8EB', null, null, 'none']}
                   alignItems="center"
                   width={['312px']}
-                  sx={{
-                    'border-left': '1px solid black',
-                    '@media screen and (max-width: 40em)': {
-                      'border-top': '1px solid black',
-                    },
-                  }}
                 >
                   <Flex flexDirection="column" justifyContent="center" alignItems="center">
                     <img
@@ -162,7 +165,7 @@ class CollectiveCategoryPicker extends React.Component {
                     </StyledButton>
                     <ExamplesLink href="#">{intl.formatMessage(this.messages.examples)}</ExamplesLink>
                   </Flex>
-                </Box>
+                </Container>
               </Fragment>
             </Flex>
           </Box>
