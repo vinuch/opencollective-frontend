@@ -4,7 +4,6 @@ import { Flex, Box } from '@rebass/grid';
 import { H1 } from '../../Text';
 import themeGet from '@styled-system/theme-get';
 import StyledButton from '../../StyledButton';
-import Illustration from '../../home/HomeIllustration';
 import styled from 'styled-components';
 import { defineMessages, injectIntl } from 'react-intl';
 import { Router } from '../../../server/pages';
@@ -49,12 +48,9 @@ class CollectiveCategoryPicker extends React.Component {
   render() {
     const { intl } = this.props;
 
-    const boxStyle = {
-      borderLeft: '1px solid lightgray',
-    };
-
     const ExamplesLink = styled.a`
       color: ${themeGet('colors.blue.500')};
+      font-size: ${themeGet('fontSizes.Caption')}px;
 
       &:hover {
         color: #dc5f7d;
@@ -63,29 +59,43 @@ class CollectiveCategoryPicker extends React.Component {
 
     return (
       <div className="CollectiveCategoryPicker">
-        <Flex flexDirection="column" p={4} mt={2}>
-          <Box mt={4} mb={3}>
-            <H1 fontSize={['H3', null, 'H1']} lineHeight={['H3', null, 'H1']} fontWeight="bold" textAlign="center">
-              {intl.formatMessage(this.messages.header)}{' '}
-            </H1>
-          </Box>
-        </Flex>
-        <Flex flexDirection="column" justifyContent="center" alignItems="center" p={2}>
-          <Box alignItems="center" p={3}>
-            <Flex justifyContent="center" alignItems="center" p={4}>
+        <style jsx global>
+          {`
+            .categoryImage {
+              height: 256px;
+              width: 256px;
+            }
+            @media screen and (max-width: 40em) {
+              .categoryImage {
+                height: 192px;
+                width: 192px;
+              }
+            }
+          `}
+        </style>
+        <Box my={4}>
+          <H1 fontSize={['H5', 'H3']} lineHeight={['H5', 'H3']} fontWeight="bold" textAlign="center">
+            {intl.formatMessage(this.messages.header)}{' '}
+          </H1>
+        </Box>
+        <Flex flexDirection="column" justifyContent="center" alignItems="center" mb={[5, 6]}>
+          <Box alignItems="center">
+            <Flex justifyContent="center" alignItems="center" flexDirection={['column', 'row']}>
               <Fragment>
-                <Box alignItems="center" width={['400px']} p={3}>
-                  <Flex flexDirection="column" justifyContent="center" alignItems="center" p={1}>
-                    <Illustration
+                <Box alignItems="center" width={['312px']}>
+                  <Flex flexDirection="column" justifyContent="center" alignItems="center">
+                    <img
+                      className="categoryImage"
                       src="/static/images/createcollective-opensource.png"
-                      display={['none', null, null, 'block']}
                       alt={intl.formatMessage(this.messages.opensource)}
                     />
                     <StyledButton
-                      buttonSize="large"
+                      buttonSize="small"
+                      height="35px"
                       buttonStyle="primary"
-                      mb={4}
-                      px={4}
+                      mt={[2, 3]}
+                      mb={2}
+                      px={3}
                       onClick={() => {
                         this.handleChange('category', 'opensource');
                         this.changeRoute({ verb: 'create', category: 'openSource' });
@@ -96,18 +106,20 @@ class CollectiveCategoryPicker extends React.Component {
                     <ExamplesLink href="#">{intl.formatMessage(this.messages.examples)}</ExamplesLink>
                   </Flex>
                 </Box>
-                <Box alignItems="center" width={['400px']} p={3} style={boxStyle}>
-                  <Flex flexDirection="column" justifyContent="center" alignItems="center" p={1}>
-                    <Illustration
+                <Box alignItems="center" width={['312px']}>
+                  <Flex flexDirection="column" justifyContent="center" alignItems="center">
+                    <img
+                      className="categoryImage"
                       src="/static/images/createcollective-anycommunity.png"
-                      display={['none', null, null, 'block']}
                       alt={intl.formatMessage(this.messages.community)}
                     />
                     <StyledButton
-                      buttonSize="large"
+                      buttonSize="small"
+                      height="35px"
                       buttonStyle="primary"
-                      mb={4}
-                      px={4}
+                      mt={[2, 3]}
+                      mb={2}
+                      px={3}
                       onClick={() => {
                         this.handleChange('category', 'community');
                         this.changeRoute({ verb: 'create', category: 'community' });
@@ -118,18 +130,29 @@ class CollectiveCategoryPicker extends React.Component {
                     <ExamplesLink href="#">{intl.formatMessage(this.messages.examples)}</ExamplesLink>
                   </Flex>
                 </Box>
-                <Box alignItems="center" width={['400px']} p={3} style={boxStyle}>
-                  <Flex flexDirection="column" justifyContent="center" alignItems="center" p={1}>
-                    <Illustration
+                <Box
+                  alignItems="center"
+                  width={['312px']}
+                  sx={{
+                    'border-left': '1px solid black',
+                    '@media screen and (max-width: 40em)': {
+                      'border-top': '1px solid black',
+                    },
+                  }}
+                >
+                  <Flex flexDirection="column" justifyContent="center" alignItems="center">
+                    <img
+                      className="categoryImage"
                       src="/static/images/createcollective-climateinitiative.png"
-                      display={['none', null, null, 'block']}
                       alt={intl.formatMessage(this.messages.climate)}
                     />
                     <StyledButton
-                      buttonSize="large"
+                      buttonSize="small"
+                      height="35px"
                       buttonStyle="primary"
-                      mb={4}
-                      px={4}
+                      mt={[2, 3]}
+                      mb={2}
+                      px={3}
                       onClick={() => {
                         this.handleChange('category', 'climate');
                         this.changeRoute({ verb: 'create', category: 'climate' });
