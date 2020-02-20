@@ -1,6 +1,8 @@
-import React, { Component } from 'react';
+import React, { Fragment, Component } from 'react';
 import PropTypes from 'prop-types';
+import { Flex, Box } from '@rebass/grid';
 import Page from '../Page';
+import { H1, P } from '../Text';
 import { addCreateCollectiveMutation } from '../../lib/graphql/mutations';
 import CreateCollectiveForm from './sections/CreateCollectiveForm';
 import CollectiveCategoryPicker from './sections/CollectiveCategoryPicker';
@@ -14,7 +16,6 @@ import { getErrorFromGraphqlException } from '../../lib/utils';
 
 class NewCreateCollective extends Component {
   static propTypes = {
-    token: PropTypes.string,
     host: PropTypes.object,
     query: PropTypes.object,
     LoggedInUser: PropTypes.object, // from withUser
@@ -57,10 +58,32 @@ class NewCreateCollective extends Component {
     this.next = props.host ? `/${props.host.slug}/apply` : '/create';
   }
 
-  async componentDidMount() {
-    const { token } = this.props;
-    if (token) {
+  componentDidMount() {
+    const { query } = this.props;
+    if (query.category === 'openSource' || query.token) {
       this.setState({ category: 'opensource' });
+    } else if (query.category === 'community') {
+      this.setState({ category: 'community' });
+    } else if (query.category === 'climate') {
+      this.setState({ category: 'climate' });
+    } else if (!query.category) {
+      this.setState({ category: null });
+    }
+    return;
+  }
+
+  componentDidUpdate(oldProps) {
+    const { query } = this.props;
+    if (oldProps.query.category !== query.category) {
+      if (query.category === 'openSource' || query.token) {
+        this.setState({ category: 'opensource' });
+      } else if (query.category === 'community') {
+        this.setState({ category: 'community' });
+      } else if (query.category === 'climate') {
+        this.setState({ category: 'climate' });
+      } else if (!query.category) {
+        this.setState({ category: null });
+      }
     }
     return;
   }
@@ -149,8 +172,9 @@ class NewCreateCollective extends Component {
   }
 
   render() {
-    const { LoggedInUser, token } = this.props;
+    const { LoggedInUser, query } = this.props;
     const { category } = this.state;
+    const { token } = query;
 
     const canApply = get(this.host, 'settings.apply');
 
@@ -161,7 +185,25 @@ class NewCreateCollective extends Component {
     return (
       <Page>
         <div className="CreateCollective">
-          {canApply && !LoggedInUser && <SignInOrJoinFree />}
+          {canApply && !LoggedInUser && (
+            <Fragment>
+              <Flex flexDirection="column" alignItems="center" mb={5} p={2}>
+                <Flex flexDirection="column" p={4} mt={2}>
+                  <Box mb={3}>
+                    <H1 fontSize="H3" lineHeight="H3" fontWeight="bold" textAlign="center">
+                      Join Open Collective
+                    </H1>
+                  </Box>
+                  <Box textAlign="center">
+                    <P fontSize="Paragraph" color="black.600" mb={1}>
+                      Create an account (or sign in) to start a collective.
+                    </P>
+                  </Box>
+                </Flex>
+                <SignInOrJoinFree />
+              </Flex>
+            </Fragment>
+          )}
           {canApply && LoggedInUser && !category && (
             <CollectiveCategoryPicker onChange={(key, value) => this.handleChange(key, value)} />
           )}
@@ -171,7 +213,6 @@ class NewCreateCollective extends Component {
               collective={this.state.collective}
               onSubmit={this.createCollective}
               onChange={(key, value) => this.handleChange(key, value)}
-              //onChange={this.resetError}
             />
           )}
           {canApply && LoggedInUser && category === 'opensource' && (
