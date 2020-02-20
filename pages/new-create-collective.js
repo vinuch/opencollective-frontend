@@ -8,13 +8,13 @@ import { withUser } from '../components/UserProvider';
 class CreateCollectivePage extends React.Component {
   static async getInitialProps({ query }) {
     return {
-      token: query && query.token,
+      query,
       slug: query && query.hostCollectiveSlug,
     };
   }
 
   static propTypes = {
-    token: PropTypes.string,
+    query: PropTypes.object,
     slug: PropTypes.string, // for addCollectiveCoverData
     data: PropTypes.object, // from withData
     loadingLoggedInUser: PropTypes.bool,
@@ -25,13 +25,13 @@ class CreateCollectivePage extends React.Component {
   }
 
   render() {
-    const { data = {}, loadingLoggedInUser, token } = this.props;
+    const { data = {}, loadingLoggedInUser, query } = this.props;
 
     if (loadingLoggedInUser || data.error) {
       return <ErrorPage loading={loadingLoggedInUser} data={data} />;
     }
 
-    return <NewCreateCollective host={data.Collective} token={token} />;
+    return <NewCreateCollective host={data.Collective} query={query} />;
   }
 }
 
