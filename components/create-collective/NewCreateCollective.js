@@ -13,6 +13,7 @@ import { get } from 'lodash';
 import { defineMessages, injectIntl } from 'react-intl';
 import { withUser } from '../UserProvider';
 import { getErrorFromGraphqlException } from '../../lib/utils';
+import { Router } from '../../server/pages';
 
 class NewCreateCollective extends Component {
   static propTypes = {
