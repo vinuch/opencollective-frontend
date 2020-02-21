@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik, Field, Form } from 'formik';
 import { Flex, Box } from '@rebass/grid';
-import { H1, Span } from '../../Text';
+import { H1, P } from '../../Text';
+import Container from '../../Container';
+import Illustration from '../../home/HomeIllustration';
 import { assign, get } from 'lodash';
 import StyledCheckbox from '../../StyledCheckbox';
 import StyledInput from '../../StyledInput';
@@ -56,14 +58,14 @@ class CreateCollectiveForm extends React.Component {
       },
       'tos.label': {
         id: 'createcollective.tos.label',
-        defaultMessage: `I agree with the toslink`,
-        // values: {
-        //   toslink: (
-        //     <a href="/tos" target="_blank" rel="noopener noreferrer">
-        //       terms of service of Open Collective
-        //     </a>
-        //   ),
-        // },
+        defaultMessage: 'I agree with the {toslink} of Open Collective',
+        values: {
+          toslink: (
+            <a href="/tos" target="_blank" rel="noopener noreferrer">
+              terms of service
+            </a>
+          ),
+        },
       },
     });
   }
@@ -100,15 +102,15 @@ class CreateCollectiveForm extends React.Component {
     const validate = values => {
       const errors = {};
 
-      if (values.name.length > 10) {
+      if (values.name !== '' && values.name.length > 10) {
         errors.name = 'Please use fewer than 10 characters';
       }
 
-      if (values.url.length < 5) {
+      if (values.url !== '' && values.url.length < 5) {
         errors.url = 'Please use more than 5 characters';
       }
 
-      if (!values.desc) {
+      if (values.desc !== '' && values.desc.length < 1) {
         errors.desc = 'You need a description.';
       }
 
@@ -127,12 +129,13 @@ class CreateCollectiveForm extends React.Component {
     };
 
     return (
-      <div className="CreateCollectiveForm">
-        <Flex flexDirection="column" p={4} mt={2}>
+      <div className="CreateCollectiveForm" maxWidth={'992px'}>
+        <Flex flexDirection="column" my={4}>
           <Box textAlign="left" minHeight={['32px']}>
             <StyledButton
               asLink
               fontSize="Paragraph"
+              color="black.600"
               onClick={() => {
                 this.changeRoute({ verb: 'create', category: undefined });
                 this.handleChange('category', null);
@@ -142,29 +145,33 @@ class CreateCollectiveForm extends React.Component {
             </StyledButton>
           </Box>
           <Box mb={3}>
-            <H1 fontSize={['H3', null, 'H1']} lineHeight={['H3', null, 'H1']} fontWeight="bold" textAlign="center">
+            <H1
+              fontSize={['H5', 'H3']}
+              lineHeight={['H5', 'H3']}
+              fontWeight="bold"
+              textAlign="center"
+              color="black.900"
+            >
               {intl.formatMessage(this.messages.header)}
             </H1>
           </Box>
           <Box textAlign="center" minHeight={['24px']}>
-            <Span mb={2}>{intl.formatMessage(this.messages.introduceSubtitle)}</Span>
+            <P fontSize="Paragraph" color="black.600" mb={2}>
+              {intl.formatMessage(this.messages.introduceSubtitle)}
+            </P>
           </Box>
         </Flex>
         <Flex alignItems="center" justifyContent="center">
-          <Box
-            p={4}
-            m={4}
-            minWidth={['700px']}
-            maxWidth={['900px']}
-            style={{ border: '1px solid lightgrey', borderRadius: 8 }}
+          <Container
+            m={[1, 4]}
+            mb={[1, 5]}
+            minWidth={['300px', '576px']}
+            maxWidth={['500px', '576px']}
+            border={['none', null, null, `1px solid #E6E8EB`]}
+            borderRadius={['none', null, null, '8px']}
+            px={[1, 4]}
           >
-            <Formik
-              validateOnChange={true}
-              validateOnBlur={true}
-              validate={validate}
-              initialValues={initialValues}
-              onSubmit={submit}
-            >
+            <Formik validate={validate} initialValues={initialValues} onSubmit={submit} validateOnChange={true}>
               {formik => {
                 const { values, handleSubmit, errors } = formik;
 
@@ -177,8 +184,7 @@ class CreateCollectiveForm extends React.Component {
                       label={intl.formatMessage(this.messages.nameLabel)}
                       value={values.name}
                       required
-                      m={4}
-                      p={2}
+                      my={4}
                     >
                       {inputProps => <Field as={StyledInput} {...inputProps} placeholder="Guinea Pigs United" />}
                     </StyledInputField>
@@ -189,8 +195,7 @@ class CreateCollectiveForm extends React.Component {
                       label={intl.formatMessage(this.messages.urlLabel)}
                       value={values.url}
                       required
-                      m={4}
-                      p={2}
+                      my={4}
                     >
                       {inputProps => (
                         <Field
@@ -208,8 +213,7 @@ class CreateCollectiveForm extends React.Component {
                       label={intl.formatMessage(this.messages.descLabel)}
                       value={values.desc}
                       required
-                      m={4}
-                      p={2}
+                      my={4}
                     >
                       {inputProps => (
                         <Field
@@ -220,7 +224,7 @@ class CreateCollectiveForm extends React.Component {
                       )}
                     </StyledInputField>
 
-                    <Box className="tos" m={4} p={2}>
+                    <Box className="tos" mx={1} my={4}>
                       <StyledCheckbox
                         name="tos"
                         label={intl.formatMessage(this.messages['tos.label'])}
@@ -231,48 +235,34 @@ class CreateCollectiveForm extends React.Component {
                           this.setState({ checked });
                         }}
                       />
-                      {get(host, 'settings.tos') && (
-                        <div>
-                          <StyledCheckbox
-                            name="tos"
-                            required
-                            checked={this.state.checked}
-                            onChange={({ checked }) => {
-                              this.handleChange('tos', checked);
-                              this.setState({ checked });
-                            }}
-                          />
-                          <span>
-                            I agree with the{' '}
-                            <a href={get(host, 'settings.tos')} target="_blank" rel="noopener noreferrer">
-                              the terms of fiscal sponsorship of the host
-                            </a>{' '}
-                            (
-                            <a href={`/${host.slug}`} target="_blank" rel="noopener noreferrer">
-                              {host.name}
-                            </a>
-                            ) that will collect money on behalf of our collective
-                          </span>
-                        </div>
-                      )}
                     </Box>
-
-                    <Box className="actions" m={4} p={2}>
+                    <Flex justifyContent={['center', 'left']} mb={4}>
                       <StyledButton
-                        buttonSize="large"
+                        buttonSize="small"
+                        bg="linear-gradient(180deg, #1869F5 0%, #1659E1 100%)"
+                        height="36px"
+                        width="148px"
                         buttonStyle="primary"
                         type="submit"
                         onSubmit={handleSubmit}
-                        mb={4}
                       >
                         {intl.formatMessage(this.messages.createButton)}
                       </StyledButton>
-                    </Box>
+                    </Flex>
                   </Form>
                 );
               }}
             </Formik>
-          </Box>
+            <Flex justifyContent="center" mb={4} display={['flex', 'none']}>
+              <Illustration
+                display={['block', 'none']}
+                className="formImage"
+                src="/static/images/createcollective-mobile-form.png"
+                width="320px"
+                height="200px"
+              />
+            </Flex>
+          </Container>
         </Flex>
       </div>
     );
