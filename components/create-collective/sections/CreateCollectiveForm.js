@@ -94,24 +94,24 @@ class CreateCollectiveForm extends React.Component {
     const { host, intl } = this.props;
 
     const initialValues = {
-      name: '',
-      desc: '',
-      url: '',
+      name: null,
+      desc: null,
+      url: null,
     };
 
     const validate = values => {
       const errors = {};
 
-      if (values.name !== '' && values.name.length > 10) {
+      if (values.name.length > 10) {
         errors.name = 'Please use fewer than 10 characters';
       }
 
-      if (values.url !== '' && values.url.length < 5) {
+      if (values.url.length < 5) {
         errors.url = 'Please use more than 5 characters';
       }
 
-      if (values.desc !== '' && values.desc.length < 1) {
-        errors.desc = 'You need a description.';
+      if (values.desc.length > 50) {
+        errors.desc = 'Please limit your description to 50 characters.';
       }
 
       return errors;
@@ -173,14 +173,14 @@ class CreateCollectiveForm extends React.Component {
           >
             <Formik validate={validate} initialValues={initialValues} onSubmit={submit} validateOnChange={true}>
               {formik => {
-                const { values, handleSubmit, errors } = formik;
+                const { values, handleSubmit, errors, touched } = formik;
 
                 return (
                   <Form>
                     <StyledInputField
                       name="name"
                       htmlFor="name"
-                      error={errors.name}
+                      error={touched.name && errors.name}
                       label={intl.formatMessage(this.messages.nameLabel)}
                       value={values.name}
                       required
@@ -191,7 +191,7 @@ class CreateCollectiveForm extends React.Component {
                     <StyledInputField
                       name="url"
                       htmlFor="url"
-                      error={errors.url}
+                      error={touched.url && errors.url}
                       label={intl.formatMessage(this.messages.urlLabel)}
                       value={values.url}
                       required
@@ -209,7 +209,7 @@ class CreateCollectiveForm extends React.Component {
                     <StyledInputField
                       name="desc"
                       htmlFor="desc"
-                      error={errors.desc}
+                      error={touched.desc && errors.desc}
                       label={intl.formatMessage(this.messages.descLabel)}
                       value={values.desc}
                       required
