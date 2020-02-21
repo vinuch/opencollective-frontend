@@ -34,6 +34,17 @@ class ConnectGithub extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.messages = defineMessages({
       guidelines: { id: 'openSourceApply.guidelines', defaultMessage: 'guidelines' },
+      'tos.label': {
+        id: 'createcollective.tosos.label',
+        defaultMessage: 'I agree with the {tososlink}',
+        values: {
+          tososlink: (
+            <a href="#" target="_blank" rel="noopener noreferrer">
+              terms of fiscal sponsorship
+            </a>
+          ),
+        },
+      },
       openSourceSubtitle: {
         id: 'collective.subtitle.opensource',
         defaultMessage: 'Open source projects are invited to join the Open Source Collective fiscal host.',
@@ -60,6 +71,7 @@ class ConnectGithub extends React.Component {
       loadingRepos: false,
       repositories: [],
       creatingCollective: false,
+      checked: false,
     };
   }
 
@@ -144,6 +156,7 @@ class ConnectGithub extends React.Component {
                 <StyledButton
                   asLink
                   fontSize="Paragraph"
+                  color="black.600"
                   onClick={() => {
                     this.changeRoute({ verb: 'create', category: undefined });
                     this.handleChange('category', null);
@@ -172,6 +185,7 @@ class ConnectGithub extends React.Component {
                 <StyledButton
                   asLink
                   fontSize="Paragraph"
+                  color="black.600"
                   onClick={() => {
                     this.changeRoute({ verb: 'create', category: undefined });
                     this.handleChange('category', null);
@@ -218,6 +232,7 @@ class ConnectGithub extends React.Component {
                 <StyledButton
                   asLink
                   fontSize="Paragraph"
+                  color="black.600"
                   onClick={() => {
                     this.changeRoute({ verb: 'create', category: undefined });
                     this.handleChange('category', null);
@@ -262,14 +277,17 @@ class ConnectGithub extends React.Component {
                   />
                 </P>
 
-                <Box mb={4}>
-                  <StyledCheckbox required onChange={({ checked }) => this.setState({ checked })} />
-                  <span>
-                    I agree with the{' '}
-                    <a href="#" target="_blank" rel="noopener noreferrer">
-                      terms of fiscal sponsorship
-                    </a>{' '}
-                  </span>
+                <Box className="tos" mx={1} my={4}>
+                  <StyledCheckbox
+                    name="tos"
+                    label={intl.formatMessage(this.messages['tos.label'])}
+                    required
+                    checked={this.state.checked}
+                    onChange={({ checked }) => {
+                      this.handleChange('tos', checked);
+                      this.setState({ checked });
+                    }}
+                  />
                 </Box>
                 <Flex justifyContent="center">
                   <StyledButton
@@ -289,7 +307,17 @@ class ConnectGithub extends React.Component {
                       defaultMessage="Verify using GitHub stars"
                     />
                   </StyledButton>
-                  <StyledButton textAlign="center" buttonSize="large" buttonStyle="secondary" mx={2} px={4}>
+                  <StyledButton
+                    textAlign="center"
+                    buttonSize="large"
+                    buttonStyle="secondary"
+                    onClick={() => {
+                      this.handleChange('category', 'opensourcemanual');
+                      this.changeRoute({ verb: 'create', category: 'opensourcemanual' });
+                    }}
+                    mx={2}
+                    px={4}
+                  >
                     <FormattedMessage
                       id="createcollective.opensource.ManualVerification"
                       defaultMessage="Request manual verification"

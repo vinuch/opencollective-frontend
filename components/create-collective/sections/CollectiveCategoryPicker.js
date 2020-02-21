@@ -60,7 +60,7 @@ class CollectiveCategoryPicker extends React.Component {
 
     return (
       <div className="CollectiveCategoryPicker">
-        <style jsx global>
+        <style jsx>
           {`
             .categoryImage {
               height: 256px;
@@ -75,7 +75,7 @@ class CollectiveCategoryPicker extends React.Component {
           `}
         </style>
         <Box my={4}>
-          <H1 fontSize={['H5', 'H3']} lineHeight={['H5', 'H3']} fontWeight="bold" textAlign="center">
+          <H1 fontSize={['H5', 'H3']} lineHeight={['H5', 'H3']} fontWeight="bold" color="black.900" textAlign="center">
             {intl.formatMessage(this.messages.header)}{' '}
           </H1>
         </Box>
